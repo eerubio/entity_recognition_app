@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prueba de API</title>
+</head>
+<body>
+     <!-- Título principal -->
+    <h1>API para el reconocimiento de entidades nombradas con Phyton</h1>
+
+     <!-- Formulario para ingresar oraciones -->
+    <form id="apiForm">
+        <label for="sentences">Oraciones:</label><br>
+        <textarea id="sentences" name="sentences" rows="4" cols="50"></textarea><br><br>
+        <input type="button" value="Enviar" onclick="sendRequest()">
+    </form>
+
+     <!-- Cuadro de texto para mostrar los resultados -->
+    <textarea id="resultBox" rows="10" cols="50" readonly></textarea> <!-- Cuadro de texto para resultados -->
+
+     <!-- Script JavaScript para realizar la solicitud a la API y mostrar resultados -->
+    <script>
+        function sendRequest() {
+            // Obtener las oraciones del cuadro de texto y dividirlas en un arreglo
+            const sentences = document.getElementById("sentences").value.split('\n');
+
+            // Realizar una solicitud POST a la API
+            fetch("http://127.0.0.1:5000/ner", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "sentences": sentences })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Obtener el cuadro de texto de resultados y mostrar los resultados formateados
+                const resultBox = document.getElementById("resultBox");
+                resultBox.value = JSON.stringify(data, null, 4); // Mostrar resultados en el cuadro de texto
+            });
+        }
+    </script>
+</body>
+</html>
